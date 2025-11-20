@@ -1,10 +1,10 @@
-name: Build AsuraScans Extension
+name: Build AsuraScans
 
 on:
-  workflow_dispatch:    # allows you to click "Run workflow" manually
-  push:                 # builds automatically on push
+  workflow_dispatch:
+  push:
     paths:
-      - "src/all/asurascans/**"
+      - "src/madara/asurascans/**"
       - ".github/workflows/build-asurascans.yml"
 
 jobs:
@@ -12,23 +12,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: "temurin"
+          java-version: "17"
 
-      - name: Give permission to Gradle
+      - name: Make Gradle executable
         run: chmod +x gradlew
 
-      - name: Build ONLY AsuraScans
-        run: ./gradlew :all:asurascans:assembleRelease
+      - name: Build AsuraScans
+        run: ./gradlew :src:madara:asurascans:assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: asurascans-extension
-          path: output/all/asurascans/*.apk
+          name: asurascans-apk
+          path: output/src/madara/asurascans/*.apk
